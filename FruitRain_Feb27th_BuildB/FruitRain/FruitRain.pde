@@ -21,6 +21,8 @@ import java.util.Scanner;
 import java.awt.event.KeyEvent;
 import javax.swing.*;
 
+//These are the cloned files ig?
+
 final public int BLACK = color(0, 0, 0);
 final public int SKY = color(113, 212, 240);
 final public int RED = color(255, 0, 0);
@@ -81,7 +83,7 @@ public Scanner input = new Scanner(System.in);
   //player = new Player(this);
   enemies = new Enemy[4];
   for (int i =0; i<4; i++) {
-    enemies[i] = new Enemy(this); //an enemy is declared, we must ensure we get one of each type
+    enemies[i] = new Enemy(this, i + 1); //an enemy is declared, we must ensure we get one of each type
   }
 
 }
@@ -147,17 +149,18 @@ void draw() {
         fill(RASPBERRY);
         text("Health points: " + healthPoints, 5, 50);
         
-        int x = 150;
-        int y = 300;
+        //int x = 150;
+        //int y = 300;
         correct = questions.get(quizIndex).getCorrect();
         
         fill(RASPBERRY);
         text(questions.get(quizIndex).getText(), 450, 100); //Aim for the top middle of the screen)
         for(int j = 1; (j - 1) < questions.get(quizIndex).getAnswers().size(); j++) {
           //**To-do**: Edit this block of codeto draw fruit and write text to line up with said fruit
+          enemies[j - 1].drawEnemy();
           fill(RASPBERRY);
-          text(j + ": " + questions.get(quizIndex).getAnswers().get(j-1), x, y);
-          y+= 125;
+          text(j + ": " + questions.get(quizIndex).getAnswers().get(j-1), enemies[j-1].getEnemyX(), enemies[j-1].getEnemyY());
+          //y+= 125;
         }
       
         guess = 5;
@@ -165,9 +168,7 @@ void draw() {
         scenario = 4;
         System.out.println("The quiz is over");
         //fill(RASPBERRY);
-        text("You win! Final Score: " + score, 450, 450); //is not displaying for some reason
-        //delay(5000);
-        //start = false;
+        text("You win! Final Score: " + score, 450, 450);
       }
     }
     
@@ -262,14 +263,11 @@ public void keyPressed() {
         text("Health points: " + healthPoints, 5, 50); //health points display is currently a little buggy
         fill(RASPBERRY);
         text("Game over... Final Score: " + score, 450, 450);
-       // delay(5000);
-        //start = false;
       } else {
           scenario = 3;
           System.out.println("An incorrect guess was made");
           fill(RASPBERRY);
-          text("That's incorrect, try again!", 450, 450); //currently only displays if you run out of health points, rather than the intended game-over scenario
-          //delay(1500);
+          text("That's incorrect, try again!", 450, 450);
           possiblePoints -= 250;
         }
       }
@@ -297,7 +295,7 @@ public ArrayList<Question> loadQuestions() {
   ArrayList<Question> questions = new ArrayList<Question>();
   while(true) {
       try {
-        Scanner inputFile = new Scanner(new File("C:\\Users\\jtspo\\Downloads\\CircleDodge\\FruitRain\\FruitRain\\Test2.csv")); //replace with actual file location
+        Scanner inputFile = new Scanner(new File("C:\\Users\\jtspo\\Downloads\\CircleDodge\\FruitRain\\FruitRain\\QuizQuestions.csv")); //replace with actual file location
         String regex = "(\\s)*,(\\s)*";
         inputFile.useDelimiter(regex);
         int index = 0;
