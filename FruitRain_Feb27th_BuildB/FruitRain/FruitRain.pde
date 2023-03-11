@@ -21,14 +21,12 @@ import java.util.Scanner;
 import java.awt.event.KeyEvent;
 import javax.swing.*;
 
-//These are the cloned files ig?
-
 final public int BLACK = color(0, 0, 0);
 final public int SKY = color(113, 212, 240);
 final public int RED = color(255, 0, 0);
 final public int RASPBERRY = color(235, 68, 126);
+final public int GRAPE = color(167, 58, 222);
 
-//public Player player;
 public Enemy[] enemies;
 
 public int guess;
@@ -38,6 +36,8 @@ public int healthPoints;
 public int possiblePoints;
 public int correct;
 public int scenario;
+public boolean oneUp;
+PImage backgroundImage;
 
 public boolean start; // a boolean variable that represents whetner the game is started.
 public int score = 0; // score earned. Potential points earned is based on whether or not they guess wrong. 1000 points for each question, a wrong answer reduces this by 250
@@ -58,6 +58,7 @@ public Scanner input = new Scanner(System.in);
   // size() must be called before all other Processing method calls, such as noStroke(). 
   // Both parameters have to be constant: the first is width and the second is height.
   size(900, 900);
+  backgroundImage = loadImage("Beachreal.png");
   
   // Disable the layer.
   noStroke();
@@ -71,11 +72,12 @@ public Scanner input = new Scanner(System.in);
   healthPoints = 5;
   guess = 5;
   possiblePoints = 1000;
+  oneUp = false;
   scenario = 1; //1: display question, 2: tell the player their guess was correct, 3: tell the player their guess was incorrect
   
   
   // Background color to be black
-  background(SKY); //this screen color gets overwritten in the draw() method
+  background(backgroundImage); //this screen color gets overwritten in the draw() method
 
   start = false;  //Before player click to start the game, it is set to false
   score = 0;      //set score to 0
@@ -112,11 +114,11 @@ void draw() {
     guess = 5;
     possiblePoints = 1000;
     scenario = 1;
-    background(SKY);
+    //background(SKY);
     displayInst(); //display instruction if not started yet
   }
   if (start) {
-    background(SKY);
+    background(backgroundImage);
     /*
     if(healthPoints == 0) {
         scenario = 4;  
@@ -146,40 +148,36 @@ void draw() {
     if(scenario == 1) {
       try {
         displayScore();
+        if((quizIndex)%6 != 0 || quizIndex == 0) {
+          oneUp = false;
+        }
+        else {
+          if(!oneUp) {
+            healthPoints++;
+            oneUp = true; //ensures the player is only given an additional health point once every 6 questions
+          }
+        }
         fill(RASPBERRY);
         text("Health points: " + healthPoints, 5, 50);
         
-        //int x = 150;
-        //int y = 300;
         correct = questions.get(quizIndex).getCorrect();
         
         fill(RASPBERRY);
-        text(questions.get(quizIndex).getText(), 450, 100); //Aim for the top middle of the screen)
+        text(questions.get(quizIndex).getText(), 375, 100); //Aim for the top middle of the screen)
         for(int j = 1; (j - 1) < questions.get(quizIndex).getAnswers().size(); j++) {
-          //**To-do**: Edit this block of codeto draw fruit and write text to line up with said fruit
           enemies[j - 1].drawEnemy();
-          fill(RASPBERRY);
-          text(j + ": " + questions.get(quizIndex).getAnswers().get(j-1), enemies[j-1].getEnemyX(), enemies[j-1].getEnemyY());
-          //y+= 125;
+          fill(GRAPE);
+          text(questions.get(quizIndex).getAnswers().get(j-1), (enemies[j-1].getEnemyX() + 50), (enemies[j-1].getEnemyY() + 75));
         }
       
         guess = 5;
       } catch(IndexOutOfBoundsException ex) {//appears to be triggering, seeing as the player returns to the start screen 
         scenario = 4;
         System.out.println("The quiz is over");
-        //fill(RASPBERRY);
+        fill(RASPBERRY);
         text("You win! Final Score: " + score, 450, 450);
       }
     }
-    
-    //the drawing methods will later be reworked
-    //"enemies" should move much slower (if at all), only have 4 total (each a different type of fruit),
-    //and have an answer mapped to it
-    /*
-    for (int i = 0; i<4; i++) {
-      enemies[i].drawEnemy();
-    }
-    */
   }
 }
 
@@ -189,7 +187,6 @@ void draw() {
  * Display a text at the upper left corner of the window, starting at coordinates (5, 25).
  */
 public void displayInst() {
-  //Consider adding fruit raining on this screen. I have tried this, but for some reason it breaks the game, put this task on the back-log
   textSize(20);
   fill(RED);
   text("Click to start game", 5, 25);
@@ -243,12 +240,10 @@ public void keyPressed() {
       //changing this wouldn't result in major consequences
   
   if(guess == correct) {
-        //Despawn fruit
         scenario = 2;
         System.out.println("A correct guess was made");
         fill(RASPBERRY);
-        text("That's correct!", 450, 450); //Currently only displays at the end of the quiz, rather than the intended text from the catch block
-        //delay(3000);
+        text("That's correct!", 450, 450);
         score += possiblePoints;
         quizIndex++;
         possiblePoints = 1000;
@@ -295,7 +290,7 @@ public ArrayList<Question> loadQuestions() {
   ArrayList<Question> questions = new ArrayList<Question>();
   while(true) {
       try {
-        Scanner inputFile = new Scanner(new File("C:\\Users\\jtspo\\Downloads\\CircleDodge\\FruitRain\\FruitRain\\QuizQuestions.csv")); //replace with actual file location
+        Scanner inputFile = new Scanner(new File("C:\\Users\\jtspo\\Downloads\\CircleDodge\\FruitRain\\FruitRain\\FruitRain-Folder\\FruitRain_Feb27th_BuildB\\FruitRain\\QuizQuestions.csv")); //replace with actual file location
         String regex = "(\\s)*,(\\s)*";
         inputFile.useDelimiter(regex);
         int index = 0;

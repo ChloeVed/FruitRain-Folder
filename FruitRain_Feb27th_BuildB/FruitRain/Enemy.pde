@@ -7,16 +7,10 @@
  * Enemy class contains the attributes and methods for an enemy.
  */
 public class Enemy {
-  final private int BLACK = color(0, 0, 0);  
-  final private int RED = color(255, 0, 0);
-  final private int GREEN = color(0, 255, 0); 
-  final private int PURPLE = color(255, 0, 255);
-  final private int YELLOW = color(255, 255, 0);
   private int enemyStartingEdge; //enemy's random starting location (either x or y)
   private float enemyX;     //x coordinate of the center of the enemy circle
   private float enemyY;     //y coordinate of the center of the enemy circle
   private int enemySize;    //diameter of the enemy circle
-  private color enemyColor; //color of the enemy circle
   private float enemySpeed; //enemy's moving speed
   private float enemySpeedAdjustor = 0.5;  /* Use a value between 0.1 and 1.0 
 to change the enemy speed. Smaller value will slow down the enemy, making
@@ -24,6 +18,9 @@ it easier for testing the game. */
 //We probably want the "enemies" to either move very slowly or not move at all
   private FruitRain game;
   private int type;
+  PImage img;
+  private int pngWidth;
+  private int pngHeight;
   //private int timeSinceSpawned;
   
   /**
@@ -51,7 +48,7 @@ it easier for testing the game. */
     return enemyX;
     
   }
-
+  
   /**
    * Method: getEnemyY
    */
@@ -80,27 +77,35 @@ it easier for testing the game. */
     
     if(type == 1) //Apples, map to the UP input
     {
-      enemySize = 50;
-      enemyColor = PURPLE;
+      pngWidth = 130;
+      pngHeight = 169;
       enemySpeed = 4;
+      enemySize = 169;
+      img = loadImage("apple.png");
     }
     else if (type == 2) //Oranges, map to the DOWN input
     {
-      enemySize = 20;
-      enemyColor = YELLOW;
-      enemySpeed = 11;
+      pngWidth = 125;
+      pngHeight = 125;
+      enemySpeed = 9;
+      enemySize = 125;
+      img = loadImage("orange.png");
     }
     else if (type == 3) //Bananas, map to the LEFT input
     {
-      enemySize = 200;
-      enemyColor = GREEN;
+      pngWidth = 100;
+      pngHeight = 180;
       enemySpeed = 4;
+      enemySize = 180;
+      img = loadImage("banana.png");
     }    
     else if (type == 4)    //Limes? map to the RIGHT input
     {
-      enemySize = 50;
-      enemyColor = RED;
-      enemySpeed = 7;
+      pngWidth = 100;
+      pngHeight = 100;
+      enemySpeed = 6;
+      enemySize = 100;
+      img = loadImage("lime.png");
     }
     
     enemyStartingEdge = 2; //remnants of the original Circle Dodge game
@@ -112,9 +117,11 @@ it easier for testing the game. */
       //set y to be above the top edge of the window
       enemyY = 0 - enemySize - 5; 
     }
-    
+    /*
     fill(enemyColor);
     circle(enemyX, enemyY, enemySize);
+    */
+    image(img, enemyX, enemyY, pngWidth, pngHeight);
   }
   
   /**
@@ -147,9 +154,13 @@ it easier for testing the game. */
       enemyY += positionDelta;
     }
     
-    
+    /*
     fill(enemyColor);
-    circle(enemyX, enemyY, enemySize); 
+    circle(enemyX, enemyY, enemySize);
+    */
+    
+    //img = getImg(this.type);
+    image(img, enemyX, enemyY, pngWidth, pngHeight);
   }
   
   /**
@@ -183,9 +194,6 @@ it easier for testing the game. */
     {
       return true;
     }
-    
-    //For type 1 chaser enemy, if the time passed since spawned
-    //is greater than 300, it also disappears.
     
     return false;
   }
