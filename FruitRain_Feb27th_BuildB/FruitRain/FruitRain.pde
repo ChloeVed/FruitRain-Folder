@@ -1,8 +1,8 @@
 /**
- * Circle Dodge Game's main file CircleDodge.pde
+ * Fruit Rain game's main file FruitRain.pde
  * 
- * @author Taisann Kham
- * @version 1.0 Course : ITEC 2140, Fall, 2020 Written: Spring 2020 (Janurary - May)
+ * @authors Justin Portillo, Dionys Del Rosario, Chloe Vedrine
+ * @version 1.0 Course : STEC 4800, Spring 2023
  * 
  * This file is similar to a Java class that contains the main method. 
  * The Processing game engine ("the main method") starts executing the game by 
@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.awt.event.KeyEvent;
 import javax.swing.*;
-import ddf.minim.*;
 import processing.sound.*;
 
 final public int BLACK = color(0, 0, 0);
@@ -76,7 +75,6 @@ SoundFile file;
   
   // Load all the questions [Make sure this arraylist can be called from anywhere in this program
   
-  //ArrayList<Question> questions = new ArrayList<Question>();
   questions = loadQuestions();
   quizSize = questions.size();
   quizIndex = 0;
@@ -84,19 +82,18 @@ SoundFile file;
   guess = 5;
   possiblePoints = 1000;
   oneUp = false;
-  scenario = 1; //1: display question, 2: tell the player their guess was correct, 3: tell the player their guess was incorrect
+  scenario = 1; //1: display question, 2: tell the player their guess was correct, 3: tell the player their guess was incorrect, 4: either game over condition
   
   
-  // Background color to be black
   background(backgroundImage); //this screen color gets overwritten in the draw() method
 
   start = false;  //Before player click to start the game, it is set to false
   score = 0;      //set score to 0
 
-  //player = new Player(this);
   enemies = new Enemy[4];
   for (int i =0; i<4; i++) {
     enemies[i] = new Enemy(this, i + 1); //an enemy is declared, we must ensure we get one of each type
+    //"Enemies" are fruits, references to fruits as enemies are a relic of the original program that was re-purposed
   }
 
 }
@@ -125,22 +122,11 @@ void draw() {
     guess = 5;
     possiblePoints = 1000;
     scenario = 1;
-    //background(SKY);
     displayInst(); //display instruction if not started yet
   }
   if (start) {
     background(backgroundImage);
 
-    /*
-    if(healthPoints == 0) {
-        scenario = 4;  
-        System.out.println("Game over!");
-        fill(RASPBERRY);
-        text("Game over... Final Score: " + score, 450, 450);
-       // delay(5000);
-        //start = false;
-      }
-      */
     if(scenario == 2) {
       delay(3000);
     }
@@ -251,7 +237,6 @@ public void keyPressed() {
   
   //Up: 1, Down: 2, Left: 3, Right: 4
       guess --; //corrects for answers index for the sake of conventionality
-      //changing this wouldn't result in major consequences
   
   if(guess == correct) {
         streak++;
@@ -271,7 +256,7 @@ public void keyPressed() {
         scenario = 4;  
         System.out.println("Game over!");
         fill(RASPBERRY);
-        text("Health points: " + healthPoints, 5, 50); //health points display is currently a little buggy
+        text("Health points: " + healthPoints, 5, 50);
         fill(RASPBERRY);
         text("Game over... Final Score: " + score, 450, 450);
       } else {
@@ -301,7 +286,7 @@ public ArrayList<Question> loadQuestions() {
   ArrayList<Question> questions = new ArrayList<Question>();
   while(true) {
       try {
-        Scanner inputFile = new Scanner(new File("C:\\Users\\dio\\Documents\\FruitRain\\Mar12Build\\Fruit Rain\\QuizQuestions.csv")); 
+        Scanner inputFile = new Scanner(new File("C:\\Users\\jtspo\\Downloads\\CircleDodge\\FruitRain\\FruitRain\\FruitRain-Folder\\FruitRain_Feb27th_BuildB\\FruitRain\\QuizQuestions.csv")); 
         String regex = "(\\s)*,(\\s)*";
         inputFile.useDelimiter(regex);
         int index = 0;

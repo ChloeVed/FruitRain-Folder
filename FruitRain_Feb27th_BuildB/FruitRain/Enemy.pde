@@ -1,8 +1,8 @@
 /**
- * Circle Dodge Game's enemy class, Enemy.
+ * Fruit Rain games's fruit class, Enemy.
  * 
- * @author Taisann Kham
- * @version 1.0 Course : ITEC 2140, Fall, 2020 Written: Spring 2020 (Janurary - May)
+ * @authors Justin Portillo, Dionys Del Rosario, Chloe Vedrine
+ * @version 1.0 Course : STEC 4800, Spring 2023
  * 
  * Enemy class contains the attributes and methods for an enemy.
  */
@@ -27,13 +27,7 @@ it easier for testing the game. */
    * Method: Enemy class constructor
    *
    * Initialize the attributes.
-   * For type:
-   *   1 purple chaser (will die after chasing for 300 frames' time)
-   *   2 yellow fast
-   *   3 gree big slow
-   *   4 red regular
-   *
-   *   Colors may be changed if we can't get pngs of fruit working or something
+   * 
    */
   public Enemy(FruitRain game, int type) {
     this.type = type;
@@ -72,8 +66,6 @@ it easier for testing the game. */
    */
   public void spawnEnemy()
   {
-    //timeSinceSpawned = 0;
-    //We need to make it so that we get one of each type of fruit
     
     if(type == 1) //Apples, map to the UP input
     {
@@ -99,7 +91,7 @@ it easier for testing the game. */
       enemySize = 180;
       img = loadImage("banana.png");
     }    
-    else if (type == 4)    //Limes? map to the RIGHT input
+    else if (type == 4)    //Limes, map to the RIGHT input
     {
       pngWidth = 100;
       pngHeight = 100;
@@ -113,14 +105,11 @@ it easier for testing the game. */
     if(enemyStartingEdge == 2) //Spawn from Top Edge of the Window 
     {
       //set x to a random value between 0 and the window's width
-      enemyX = random(0, game.width); 
+      enemyX = 50 + random(0, game.width - 150); 
       //set y to be above the top edge of the window
       enemyY = 0 - enemySize - 5; 
     }
-    /*
-    fill(enemyColor);
-    circle(enemyX, enemyY, enemySize);
-    */
+
     image(img, enemyX, enemyY, pngWidth, pngHeight);
   }
   
@@ -154,12 +143,6 @@ it easier for testing the game. */
       enemyY += positionDelta;
     }
     
-    /*
-    fill(enemyColor);
-    circle(enemyX, enemyY, enemySize);
-    */
-    
-    //img = getImg(this.type);
     image(img, enemyX, enemyY, pngWidth, pngHeight);
   }
   
@@ -174,18 +157,8 @@ it easier for testing the game. */
    */
   public boolean outOfSight()
   {
-    //left spawned and disappeared into the right edge
-    if(enemyStartingEdge == 0 && enemyX >= game.width + enemySize + 5)
-    {
-      return true;
-    }  
-    //right spawned and disappeared into the left edge
-    else if (enemyStartingEdge == 1 && enemyX <= 0 - enemySize - 5)
-    {
-      return true;
-    }
     //top spawned and disappeared into the bottom edge
-    else if (enemyStartingEdge == 2 && enemyY >= game.height + enemySize + 5)
+    if (enemyStartingEdge == 2 && enemyY >= game.height + enemySize + 5)
     {
       return true;
     } 
