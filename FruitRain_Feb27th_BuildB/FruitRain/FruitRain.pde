@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.awt.event.KeyEvent;
 import javax.swing.*;
+import ddf.minim.*;
+import processing.sound.*;
 
 final public int BLACK = color(0, 0, 0);
 final public int SKY = color(113, 212, 240);
@@ -37,6 +39,7 @@ public int possiblePoints;
 public int correct;
 public int scenario;
 public boolean oneUp;
+public int streak;
 PImage backgroundImage;
 
 public boolean start; // a boolean variable that represents whetner the game is started.
@@ -45,6 +48,8 @@ public int hitPoints = 5; //player starts with 5 hit points, they lose hit point
 public ArrayList<Question> questions = new ArrayList<Question>();
 public Scanner input = new Scanner(System.in);
 
+//for music
+SoundFile file;
 
 /**
  * Method: setup()
@@ -60,6 +65,12 @@ public Scanner input = new Scanner(System.in);
   size(900, 900);
   backgroundImage = loadImage("Beachreal.png");
   
+  //music
+
+  file = new SoundFile(this,"music.wav");
+  file.play();
+  file.amp(.075);
+    
   // Disable the layer.
   noStroke();
   
@@ -119,6 +130,7 @@ void draw() {
   }
   if (start) {
     background(backgroundImage);
+
     /*
     if(healthPoints == 0) {
         scenario = 4;  
@@ -158,7 +170,7 @@ void draw() {
           }
         }
         fill(RASPBERRY);
-        text("Health points: " + healthPoints, 5, 50);
+        text("Lives left: " + healthPoints, 5, 50);
         
         correct = questions.get(quizIndex).getCorrect();
         
@@ -202,6 +214,7 @@ public void displayScore() {
   textSize(20);
   fill(RED);
   text("Score: " + score, 5, 25);
+  text("Streak: " + streak, 5, 75); 
 }
 
 
@@ -216,6 +229,7 @@ public void displayScore() {
  * If the key pressed is the ENTER key, start the game.
  */
 public void keyPressed() {
+  
   if (key == ENTER) {
     start = true;
     return;
@@ -240,6 +254,7 @@ public void keyPressed() {
       //changing this wouldn't result in major consequences
   
   if(guess == correct) {
+        streak++;
         scenario = 2;
         System.out.println("A correct guess was made");
         fill(RASPBERRY);
@@ -250,6 +265,7 @@ public void keyPressed() {
         
       } else if((guess != 4) && (guess != correct)) { //recall that the default value for guess, 5, got reduced by one
         healthPoints--;
+        streak = 0;
         
         if(healthPoints == 0) {
         scenario = 4;  
@@ -279,18 +295,13 @@ public void mouseClicked(){
 }
 
 
-/**
- * Method: loadQuestions
- *
- * Called upon startup
- * 
- * Puts all of the questions into an ArrayList
-*/
+// loadQuestions, called upon startup 
+
 public ArrayList<Question> loadQuestions() {
   ArrayList<Question> questions = new ArrayList<Question>();
   while(true) {
       try {
-        Scanner inputFile = new Scanner(new File("C:\\Users\\jtspo\\Downloads\\CircleDodge\\FruitRain\\FruitRain\\FruitRain-Folder\\FruitRain_Feb27th_BuildB\\FruitRain\\QuizQuestions.csv")); //replace with actual file location
+        Scanner inputFile = new Scanner(new File("C:\\Users\\dio\\Documents\\FruitRain\\Mar12Build\\Fruit Rain\\QuizQuestions.csv")); 
         String regex = "(\\s)*,(\\s)*";
         inputFile.useDelimiter(regex);
         int index = 0;
@@ -318,7 +329,7 @@ public ArrayList<Question> loadQuestions() {
         inputFile.close();
         break;
       } catch(FileNotFoundException ex) {
-        System.out.println("file not found, make sure the file is in the correct location");
+        System.out.println("Life is hard");
         break;
       }
     }
