@@ -21,6 +21,7 @@ import java.util.Scanner;
 import java.awt.event.KeyEvent;
 import javax.swing.*;
 import processing.sound.*;
+import gifAnimation.*;
 
 final public int BLACK = color(0, 0, 0);
 final public int SKY = color(113, 212, 240);
@@ -40,6 +41,8 @@ public int scenario;
 public boolean oneUp;
 public int streak;
 PImage backgroundImage;
+PImage startup;
+Gif myAnimation;
 
 public boolean start; // a boolean variable that represents whetner the game is started.
 public int score = 0; // score earned. Potential points earned is based on whether or not they guess wrong. 1000 points for each question, a wrong answer reduces this by 250
@@ -62,7 +65,10 @@ SoundFile file;
   // size() must be called before all other Processing method calls, such as noStroke(). 
   // Both parameters have to be constant: the first is width and the second is height.
   size(900, 900);
-  backgroundImage = loadImage("Beachreal.png");
+  backgroundImage = loadImage("Beachreal2.png");
+      myAnimation = new Gif(this, "startup.gif");
+    myAnimation.play();
+  
   
   //music
 
@@ -70,6 +76,11 @@ SoundFile file;
   file.play();
   file.amp(.075);
     
+   //FONT
+   PFont mono;
+   mono = createFont("font.ttf", 128);
+   textFont(mono);
+   
   // Disable the layer.
   noStroke();
   
@@ -83,7 +94,6 @@ SoundFile file;
   possiblePoints = 1000;
   oneUp = false;
   scenario = 1; //1: display question, 2: tell the player their guess was correct, 3: tell the player their guess was incorrect, 4: either game over condition
-  
   
   background(backgroundImage); //this screen color gets overwritten in the draw() method
 
@@ -116,6 +126,8 @@ SoundFile file;
  */
 void draw() {
   if (!start) {
+    backgroundImage = loadImage("Beachreal2.png");
+    image(myAnimation, 0, 0);
     quizIndex = 0;
     score = 0;
     healthPoints = 5;
@@ -185,9 +197,10 @@ void draw() {
  * Display a text at the upper left corner of the window, starting at coordinates (5, 25).
  */
 public void displayInst() {
-  textSize(20);
+  
+  textSize(40);
   fill(RED);
-  text("Click to start game", 5, 25);
+  text("Click to start game", 200, 450);
 }
 
 /*  
@@ -286,7 +299,7 @@ public ArrayList<Question> loadQuestions() {
   ArrayList<Question> questions = new ArrayList<Question>();
   while(true) {
       try {
-        Scanner inputFile = new Scanner(new File("C:\\Users\\jtspo\\Downloads\\CircleDodge\\FruitRain\\FruitRain\\FruitRain-Folder\\FruitRain_Feb27th_BuildB\\FruitRain\\QuizQuestions.csv")); 
+        Scanner inputFile = new Scanner(new File("C:\\Users\\diony\\OneDrive\\Documents\\GitHub\\FruitRain-Folder\\FruitRain_Feb27th_BuildB\\FruitRain\\QuizQuestions.csv")); 
         String regex = "(\\s)*,(\\s)*";
         inputFile.useDelimiter(regex);
         int index = 0;
