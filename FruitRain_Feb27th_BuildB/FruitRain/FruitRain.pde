@@ -27,6 +27,10 @@ final public int BLACK = color(0, 0, 0);
 final public int SKY = color(113, 212, 240);
 final public int RED = color(255, 0, 0);
 final public int RASPBERRY = color(235, 68, 126);
+final public int APPLE = color(232, 71, 46);
+final public int ORANGE = color(242, 168, 31);
+final public int BANANA = color(245, 239, 69);
+final public int LIME = color(111, 209, 75);
 final public int GRAPE = color(167, 58, 222);
 
 public Enemy[] enemies;
@@ -40,6 +44,9 @@ public int correct;
 public int scenario;
 public boolean oneUp;
 public int streak;
+public boolean quizChosen;
+public String quizName;
+public boolean quizLoaded;
 PImage backgroundImage;
 PImage startup;
 Gif myAnimation;
@@ -84,15 +91,14 @@ SoundFile file;
   // Disable the layer.
   noStroke();
   
-  // Load all the questions [Make sure this arraylist can be called from anywhere in this program
   
-  questions = loadQuestions();
-  quizSize = questions.size();
   quizIndex = 0;
   healthPoints = 5;
   guess = 5;
   possiblePoints = 1000;
   oneUp = false;
+  quizChosen = false;
+  quizLoaded = false;
   scenario = 1; //1: display question, 2: tell the player their guess was correct, 3: tell the player their guess was incorrect, 4: either game over condition
   
   background(backgroundImage); //this screen color gets overwritten in the draw() method
@@ -134,12 +140,34 @@ void draw() {
     guess = 5;
     possiblePoints = 1000;
     scenario = 1;
+    quizChosen = false;
+    quizLoaded = false;
+    streak = 0;
     displayInst(); //display instruction if not started yet
   }
   if (start) {
     background(backgroundImage);
 
-    if(scenario == 2) {
+    if(!quizChosen) {
+      fill(RASPBERRY);
+      text("Choose a quiz: ", 375, 100);
+      fill(APPLE);
+      text("APPLE: Full Quiz", 100, 250);
+      fill(ORANGE);
+      text("ORANGE: Variables", 100, 400);
+      fill(BANANA);
+      text("BANANA: Strings", 100, 550);
+      fill(LIME);
+      text("LIME: Conditionals", 100, 700);
+      
+      
+    } else {
+      if(quizChosen && !quizLoaded) {
+        questions = loadQuestions();
+        quizSize = questions.size();
+        quizLoaded = true;
+      }
+      if(scenario == 2) {
       delay(3000);
     }
     if(scenario == 3) {
@@ -187,6 +215,7 @@ void draw() {
         fill(RASPBERRY);
         text("You win! Final Score: " + score, 450, 450);
       }
+    }
     }
   }
 }
@@ -236,16 +265,36 @@ public void keyPressed() {
   
   if(start) {
   if(keyCode == UP) {
-    guess = 1;
+    if(!quizChosen) {
+      quizName = "QuizQuestions.csv";
+      quizChosen = true;
+    } else {
+      guess = 1;
+    }
   }
   if(keyCode == DOWN) {
-    guess = 2;
+    if(!quizChosen) {
+      quizName = "Variables.csv";
+      quizChosen = true;
+    } else {
+      guess = 2;
+    }
   }
   if(keyCode == LEFT) {
-    guess = 3;
+    if(!quizChosen) {
+      quizName = "Strings.csv";
+      quizChosen = true;
+    } else {
+      guess = 3;
+    }
   }
   if(keyCode == RIGHT) {
-    guess = 4;
+    if(!quizChosen) {
+      quizName = "Conditionals.csv";
+      quizChosen = true;
+    } else {
+      guess = 4;
+    }
   }
   
   //Up: 1, Down: 2, Left: 3, Right: 4
@@ -297,9 +346,11 @@ public void mouseClicked(){
 
 public ArrayList<Question> loadQuestions() {
   ArrayList<Question> questions = new ArrayList<Question>();
+  String fileRoot = "C:\\Users\\jtspo\\Downloads\\CircleDodge\\FruitRain\\FruitRain\\FruitRain-Folder\\FruitRain_Feb27th_BuildB\\FruitRain\\"; //change this line to match YOUR file path. DO NOT include the csv file name
   while(true) {
       try {
-        Scanner inputFile = new Scanner(new File("C:\\Users\\diony\\OneDrive\\Documents\\GitHub\\FruitRain-Folder\\FruitRain_Feb27th_BuildB\\FruitRain\\QuizQuestions.csv")); 
+        String filePath = fileRoot + quizName;
+        Scanner inputFile = new Scanner(new File(filePath)); 
         String regex = "(\\s)*,(\\s)*";
         inputFile.useDelimiter(regex);
         int index = 0;

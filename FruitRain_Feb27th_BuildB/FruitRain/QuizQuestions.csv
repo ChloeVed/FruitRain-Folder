@@ -22,7 +22,7 @@ Is anything printed?",bool_q1,2,Yes,No,0,
      int z = y - x;
      System.out.println(z + y);
 }
-What will print?",var_q2,1,12,20,3,11,3,
+What will print?",var_q2,1,12,20,3,11,2,
 "{
      double x = 3.2;
      x = x + 4.8;
@@ -128,7 +128,7 @@ What gets printed?",var_q7,1,15,8,5,2,3,
      String x = "wub";
      String y = "dub";
      String z = "ba";
-     System.out.println(x + z +y + z + y + "" is that true?");
+     System.out.println(x + z + y + z + y + "" is that true?");
 }
 What gets printed?",str_q6,1,Ye,wubdubba is that true?,wubbadubdub is that true?,wubbadubbadub is that true?,3,
 "{
