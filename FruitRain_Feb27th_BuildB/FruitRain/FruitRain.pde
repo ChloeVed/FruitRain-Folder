@@ -21,7 +21,6 @@ import java.util.Scanner;
 import java.awt.event.KeyEvent;
 import javax.swing.*;
 import processing.sound.*;
-import gifAnimation.*;
 
 final public int BLACK = color(0, 0, 0);
 final public int SKY = color(113, 212, 240);
@@ -49,7 +48,6 @@ public String quizName;
 public boolean quizLoaded;
 PImage backgroundImage;
 PImage startup;
-Gif myAnimation;
 
 public boolean start; // a boolean variable that represents whetner the game is started.
 public int score = 0; // score earned. Potential points earned is based on whether or not they guess wrong. 1000 points for each question, a wrong answer reduces this by 250
@@ -58,7 +56,15 @@ public ArrayList<Question> questions = new ArrayList<Question>();
 public Scanner input = new Scanner(System.in);
 
 //for music
-SoundFile file;
+public boolean mStatus;
+public SoundFile file;
+public SoundFile intro;
+
+//startup screen
+public PImage[] gif;
+public int numOfGif;
+public int frames;
+
 
 /**
  * Method: setup()
@@ -71,22 +77,39 @@ SoundFile file;
   // Initilize the window size.
   // size() must be called before all other Processing method calls, such as noStroke(). 
   // Both parameters have to be constant: the first is width and the second is height.
+  
+  //Create Startup screen
+  numOfGif = 46; 
+  gif = new PImage[numOfGif];
+  for (int i = 0; i < numOfGif; i++) {
+    gif[i] = loadImage(i + ".gif"); 
+  }
+  
+  
   size(900, 900);
   backgroundImage = loadImage("Beachreal2.png");
-      myAnimation = new Gif(this, "startup.gif");
-    myAnimation.play();
   
   
   //music
-
+  //Game theme 
   file = new SoundFile(this,"music.wav");
+  /*
   file.play();
   file.amp(.075);
+  */
+  //Sets intro theme to play 
+  intro = new SoundFile(this,"intro.wav");  
+  intro.play();
+  intro.amp(-0.008);
+  mStatus = false;
     
-   //FONT
-   PFont mono;
-   mono = createFont("font.ttf", 128);
-   textFont(mono);
+  //FONT 
+  PFont font;
+  font = createFont("font.ttf", 128);
+  textFont(font);
+   
+
+   
    
   // Disable the layer.
   noStroke();
@@ -131,9 +154,15 @@ SoundFile file;
  * Increase the score by 1.
  */
 void draw() {
+  //Call Start up screen
+  image(gif[frames], 0, 0);
+  if (frames < numOfGif - 1)
+    frames = frames + 1;
+    
+    
   if (!start) {
+    
     backgroundImage = loadImage("Beachreal2.png");
-    image(myAnimation, 0, 0);
     quizIndex = 0;
     score = 0;
     healthPoints = 5;
@@ -147,7 +176,7 @@ void draw() {
   }
   if (start) {
     background(backgroundImage);
-
+    
     if(!quizChosen) {
       fill(RASPBERRY);
       text("Choose a quiz: ", 375, 100);
@@ -166,6 +195,7 @@ void draw() {
         questions = loadQuestions();
         quizSize = questions.size();
         quizLoaded = true;
+        musicSwap();
       }
       if(scenario == 2) {
       delay(3000);
@@ -229,7 +259,7 @@ public void displayInst() {
   
   textSize(40);
   fill(RED);
-  text("Click to start game", 200, 450);
+  text("CLICK TO START GAME", 200,750);
 }
 
 /*  
@@ -290,6 +320,7 @@ public void keyPressed() {
   }
   if(keyCode == RIGHT) {
     if(!quizChosen) {
+     //quizName = "Conditionals.csv";
       quizName = "Conditionals.csv";
       quizChosen = true;
     } else {
@@ -321,6 +352,7 @@ public void keyPressed() {
         text("Health points: " + healthPoints, 5, 50);
         fill(RASPBERRY);
         text("Game over... Final Score: " + score, 450, 450);
+        musicSwap();
       } else {
           scenario = 3;
           System.out.println("An incorrect guess was made");
@@ -342,11 +374,29 @@ public void mouseClicked(){
 }
 
 
+
+//musicSwap() Swaps the music tracks
+public void musicSwap() {
+  if (mStatus == false) {
+    intro.stop();
+    file.play();
+    file.amp(.075);
+    mStatus = true;
+  }
+  
+  else {
+   file.stop();
+   intro.play();
+   intro.amp(-0.008);
+   mStatus = false;
+  }
+}
+
 // loadQuestions, called upon startup 
 
 public ArrayList<Question> loadQuestions() {
   ArrayList<Question> questions = new ArrayList<Question>();
-  String fileRoot = "C:\\Users\\jtspo\\Downloads\\CircleDodge\\FruitRain\\FruitRain\\FruitRain-Folder\\FruitRain_Feb27th_BuildB\\FruitRain\\"; //change this line to match YOUR file path. DO NOT include the csv file name
+  String fileRoot = "C:\\Users\\dio\\Documents\\GitHub\\FruitRain-Folder\\FruitRain_Feb27th_BuildB\\FruitRain\\"; //change this line to match YOUR file path. DO NOT include the csv file name
   while(true) {
       try {
         String filePath = fileRoot + quizName;
