@@ -9,7 +9,7 @@ x = ?",var_q1,1,12,8,7,3,2,
      int z = y - x;
      System.out.println(z + y);
 }
-What will print?",var_q2,1,12,20,3,11,2,
+What will print?",var_q2,1,12,20,3,11,3,
 "{
      double x = 3.2;
      x = x + 4.8;

@@ -396,7 +396,7 @@ public void musicSwap() {
 
 public ArrayList<Question> loadQuestions() {
   ArrayList<Question> questions = new ArrayList<Question>();
-  String fileRoot = "C:\\Users\\dio\\Documents\\GitHub\\FruitRain-Folder\\FruitRain_Feb27th_BuildB\\FruitRain\\"; //change this line to match YOUR file path. DO NOT include the csv file name
+  String fileRoot = "C:\\Users\\jtspo\\Downloads\\CircleDodge\\FruitRain\\FruitRain\\FruitRain-Folder\\FruitRain_Feb27th_BuildB\\FruitRain\\"; //change this line to match YOUR file path. DO NOT include the csv file name
   while(true) {
       try {
         String filePath = fileRoot + quizName;

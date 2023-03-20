@@ -22,7 +22,7 @@ Is anything printed?",bool_q1,2,Yes,No,0,
      int z = y - x;
      System.out.println(z + y);
 }
-What will print?",var_q2,1,12,20,3,11,2,
+What will print?",var_q2,1,12,20,3,11,3,
 "{
      double x = 3.2;
      x = x + 4.8;
