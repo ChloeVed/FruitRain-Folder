@@ -225,7 +225,7 @@ void draw() {
             oneUp = true; //ensures the player is only given an additional health point once every 6 questions
           }
         }
-        fill(RASPBERRY);
+        fill(ORANGE);
         text("Lives left: " + healthPoints, 5, 50);
         
         correct = questions.get(quizIndex).getCorrect();
@@ -270,7 +270,7 @@ public void displayInst() {
  
 public void displayScore() {
   textSize(20);
-  fill(RED);
+  fill(BANANA);
   text("Score: " + score, 5, 25);
   text("Streak: " + streak, 5, 75); 
 }
@@ -396,7 +396,8 @@ public void musicSwap() {
 
 public ArrayList<Question> loadQuestions() {
   ArrayList<Question> questions = new ArrayList<Question>();
-  String fileRoot = "C:\\Users\\jtspo\\Downloads\\CircleDodge\\FruitRain\\FruitRain\\FruitRain-Folder\\FruitRain_Feb27th_BuildB\\FruitRain\\"; //change this line to match YOUR file path. DO NOT include the csv file name
+  //String fileRoot = "C:\\Users\\jtspo\\Downloads\\CircleDodge\\FruitRain\\FruitRain\\FruitRain-Folder\\FruitRain_Feb27th_BuildB\\FruitRain\\"; //change this line to match YOUR file path. DO NOT include the csv file name
+  String fileRoot = "C:\\Users\\diony\\OneDrive\\Documents\\GitHub\\FruitRain-Folder\\FruitRain_Feb27th_BuildB\\FruitRain\\"; //change this line to match YOUR file path. DO NOT include the csv file name
   while(true) {
       try {
         String filePath = fileRoot + quizName;
