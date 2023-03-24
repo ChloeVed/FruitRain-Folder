@@ -48,6 +48,8 @@ public String quizName;
 public boolean quizLoaded;
 PImage backgroundImage;
 PImage startup;
+long startTime;
+long endTime;
 
 public boolean start; // a boolean variable that represents whetner the game is started.
 public int score = 0; // score earned. Potential points earned is based on whether or not they guess wrong. 1000 points for each question, a wrong answer reduces this by 250
@@ -173,6 +175,7 @@ void draw() {
     quizLoaded = false;
     streak = 0;
     displayInst(); //display instruction if not started yet
+    startTime = System.currentTimeMillis();
   }
   if (start) {
     background(backgroundImage);
@@ -197,13 +200,15 @@ void draw() {
         quizLoaded = true;
         musicSwap();
       }
-      if(scenario == 2) {
+      if(scenario == 2) { //correct
       delay(3000);
+      startTime = System.currentTimeMillis();
     }
-    if(scenario == 3) {
+    if(scenario == 3) { //incorrect
       delay(1500);
+      startTime = System.currentTimeMillis();
     }
-    if(scenario == 4) {
+    if(scenario == 4) { //Game Over
       start = false;
       delay(5000);
     }
@@ -213,7 +218,7 @@ void draw() {
       guess = 5;
       delay(500);
     }
-    if(scenario == 1) {
+    if(scenario == 1) { //Continue loop as normal
       try {
         displayScore();
         if((quizIndex)%6 != 0 || quizIndex == 0) {
@@ -231,7 +236,7 @@ void draw() {
         correct = questions.get(quizIndex).getCorrect();
         
         fill(RASPBERRY);
-        text(questions.get(quizIndex).getText(), 375, 100); //Aim for the top middle of the screen)
+        text(questions.get(quizIndex).getText(), 325, 100); //Aim for the top middle of the screen)
         for(int j = 1; (j - 1) < questions.get(quizIndex).getAnswers().size(); j++) {
           enemies[j - 1].drawEnemy();
           fill(GRAPE);
@@ -299,7 +304,11 @@ public void keyPressed() {
       quizName = "QuizQuestions.csv";
       quizChosen = true;
     } else {
-      guess = 1;
+      endTime = System.currentTimeMillis();
+      if(endTime - startTime > 5000) {
+        //startTime = System.currentTimeMillis();
+        guess = 1;
+      }
     }
   }
   if(keyCode == DOWN) {
@@ -307,7 +316,11 @@ public void keyPressed() {
       quizName = "Variables.csv";
       quizChosen = true;
     } else {
-      guess = 2;
+      endTime = System.currentTimeMillis();
+      if(endTime - startTime > 5000) {
+        //startTime = System.currentTimeMillis();
+        guess = 2;
+      }
     }
   }
   if(keyCode == LEFT) {
@@ -315,7 +328,11 @@ public void keyPressed() {
       quizName = "Strings.csv";
       quizChosen = true;
     } else {
-      guess = 3;
+      endTime = System.currentTimeMillis();
+      if(endTime - startTime > 5000) {
+        //startTime = System.currentTimeMillis();
+        guess = 3;
+      }
     }
   }
   if(keyCode == RIGHT) {
@@ -324,7 +341,11 @@ public void keyPressed() {
       quizName = "Conditionals.csv";
       quizChosen = true;
     } else {
-      guess = 4;
+      endTime = System.currentTimeMillis();
+      if(endTime - startTime > 5000) {
+        //startTime = System.currentTimeMillis();
+        guess = 4;
+      }
     }
   }
   
@@ -345,7 +366,7 @@ public void keyPressed() {
         healthPoints--;
         streak = 0;
         
-        if(healthPoints == 0) {
+        if(healthPoints <= 0) {
         scenario = 4;  
         System.out.println("Game over!");
         fill(RASPBERRY);
@@ -396,8 +417,8 @@ public void musicSwap() {
 
 public ArrayList<Question> loadQuestions() {
   ArrayList<Question> questions = new ArrayList<Question>();
-  //String fileRoot = "C:\\Users\\jtspo\\Downloads\\CircleDodge\\FruitRain\\FruitRain\\FruitRain-Folder\\FruitRain_Feb27th_BuildB\\FruitRain\\"; //change this line to match YOUR file path. DO NOT include the csv file name
-  String fileRoot = "C:\\Users\\diony\\OneDrive\\Documents\\GitHub\\FruitRain-Folder\\FruitRain_Feb27th_BuildB\\FruitRain\\"; //change this line to match YOUR file path. DO NOT include the csv file name
+  String fileRoot = "C:\\Users\\jtspo\\Downloads\\CircleDodge\\FruitRain\\FruitRain\\FruitRain-Folder\\FruitRain_Feb27th_BuildB\\FruitRain\\"; //change this line to match YOUR file path. DO NOT include the csv file name
+  //String fileRoot = "C:\\Users\\diony\\OneDrive\\Documents\\GitHub\\FruitRain-Folder\\FruitRain_Feb27th_BuildB\\FruitRain\\"; //change this line to match YOUR file path. DO NOT include the csv file name
   while(true) {
       try {
         String filePath = fileRoot + quizName;
