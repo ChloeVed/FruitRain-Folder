@@ -48,8 +48,6 @@ public String quizName;
 public boolean quizLoaded;
 PImage backgroundImage;
 PImage startup;
-long startTime;
-long endTime;
 
 public boolean start; // a boolean variable that represents whetner the game is started.
 public int score = 0; // score earned. Potential points earned is based on whether or not they guess wrong. 1000 points for each question, a wrong answer reduces this by 250
@@ -61,25 +59,24 @@ public Scanner input = new Scanner(System.in);
 public boolean mStatus;
 public SoundFile file;
 public SoundFile intro;
+public SoundFile error;
+public SoundFile good;
+public SoundFile victory;
+public SoundFile qpicked;
+public SoundFile pressStart;
+
 
 //startup screen
 public PImage[] gif;
 public int numOfGif;
 public int frames;
 
+//inputdelay
+long lastInputTime;
+long timeToSkip;
 
-/**
- * Method: setup()
- *
- * This method is only invoked once when the game is started.
- * It does a couple of standard things, such as initializes window size, applies background color.
- * Then it initializes variables, such as player location, score, and etc.
- */
  void setup() {
-  // Initilize the window size.
-  // size() must be called before all other Processing method calls, such as noStroke(). 
-  // Both parameters have to be constant: the first is width and the second is height.
-  
+
   //Create Startup screen
   numOfGif = 46; 
   gif = new PImage[numOfGif];
@@ -104,7 +101,13 @@ public int frames;
   intro.play();
   intro.amp(-0.008);
   mStatus = false;
-    
+ 
+ good = new SoundFile(this,"correct.wav");
+ error = new SoundFile(this,"wrong.wav");
+ victory = new SoundFile(this,"winner.wav");
+ qpicked = new SoundFile(this, "startsound.wav");
+ pressStart = new SoundFile(this, "realstart.wav");
+  
   //FONT 
   PFont font;
   font = createFont("font.ttf", 128);
@@ -175,7 +178,6 @@ void draw() {
     quizLoaded = false;
     streak = 0;
     displayInst(); //display instruction if not started yet
-    startTime = System.currentTimeMillis();
   }
   if (start) {
     background(backgroundImage);
@@ -200,15 +202,13 @@ void draw() {
         quizLoaded = true;
         musicSwap();
       }
-      if(scenario == 2) { //correct
+      if(scenario == 2) {
       delay(3000);
-      startTime = System.currentTimeMillis();
     }
-    if(scenario == 3) { //incorrect
+    if(scenario == 3) {
       delay(1500);
-      startTime = System.currentTimeMillis();
     }
-    if(scenario == 4) { //Game Over
+    if(scenario == 4) {
       start = false;
       delay(5000);
     }
@@ -218,7 +218,7 @@ void draw() {
       guess = 5;
       delay(500);
     }
-    if(scenario == 1) { //Continue loop as normal
+    if(scenario == 1) {
       try {
         displayScore();
         if((quizIndex)%6 != 0 || quizIndex == 0) {
@@ -236,10 +236,10 @@ void draw() {
         correct = questions.get(quizIndex).getCorrect();
         
         fill(RASPBERRY);
-        text(questions.get(quizIndex).getText(), 325, 100); //Aim for the top middle of the screen)
+        text(questions.get(quizIndex).getText(), 375, 100); //Aim for the top middle of the screen)
         for(int j = 1; (j - 1) < questions.get(quizIndex).getAnswers().size(); j++) {
           enemies[j - 1].drawEnemy();
-          fill(GRAPE);
+          fill(color(255,0,46));
           text(questions.get(quizIndex).getAnswers().get(j-1), (enemies[j-1].getEnemyX() + 50), (enemies[j-1].getEnemyY() + 75));
         }
       
@@ -274,7 +274,7 @@ public void displayInst() {
  */
  
 public void displayScore() {
-  textSize(20);
+  textSize(25);
   fill(BANANA);
   text("Score: " + score, 5, 25);
   text("Streak: " + streak, 5, 75); 
@@ -299,54 +299,73 @@ public void keyPressed() {
   }
   
   if(start) {
+    
+  lastInputTime = millis();
+  
   if(keyCode == UP) {
+
     if(!quizChosen) {
+      qpicked.play();
       quizName = "QuizQuestions.csv";
       quizChosen = true;
-    } else {
-      endTime = System.currentTimeMillis();
-      if(endTime - startTime > 5000) {
-        //startTime = System.currentTimeMillis();
-        guess = 1;
-      }
+    } else if (lastInputTime >= timeToSkip) {
+      guess = 1;
+      lastInputTime = millis();
+      timeToSkip = lastInputTime + 2000;
     }
+   else {
+    lastInputTime = millis();
+    timeToSkip = lastInputTime + 1000;
+    } 
   }
   if(keyCode == DOWN) {
+
     if(!quizChosen) {
+      qpicked.play();
       quizName = "Variables.csv";
       quizChosen = true;
-    } else {
-      endTime = System.currentTimeMillis();
-      if(endTime - startTime > 5000) {
-        //startTime = System.currentTimeMillis();
-        guess = 2;
-      }
+    } else if (lastInputTime >= timeToSkip) {
+      guess = 2;
+      lastInputTime = millis();
+      timeToSkip = lastInputTime + 2000;
     }
+   else {
+    lastInputTime = millis();
+    timeToSkip = lastInputTime + 1000;
+    } 
   }
   if(keyCode == LEFT) {
+    
+
     if(!quizChosen) {
+      qpicked.play();
       quizName = "Strings.csv";
       quizChosen = true;
-    } else {
-      endTime = System.currentTimeMillis();
-      if(endTime - startTime > 5000) {
-        //startTime = System.currentTimeMillis();
-        guess = 3;
-      }
+    } else if (lastInputTime >= timeToSkip) {
+      guess = 3;
+      lastInputTime = millis();
+      timeToSkip = lastInputTime + 2000;
     }
+   else {
+    lastInputTime = millis();
+    timeToSkip = lastInputTime + 1000;
+    } 
   }
   if(keyCode == RIGHT) {
+
     if(!quizChosen) {
-     //quizName = "Conditionals.csv";
+      qpicked.play();
       quizName = "Conditionals.csv";
       quizChosen = true;
-    } else {
-      endTime = System.currentTimeMillis();
-      if(endTime - startTime > 5000) {
-        //startTime = System.currentTimeMillis();
-        guess = 4;
-      }
+    } else if (lastInputTime >= timeToSkip) {
+      guess = 4;
+      lastInputTime = millis();
+      timeToSkip = lastInputTime + 3000;
     }
+   else {
+    lastInputTime = millis();
+    timeToSkip = lastInputTime + 1500;
+    } 
   }
   
   //Up: 1, Down: 2, Left: 3, Right: 4
@@ -358,6 +377,7 @@ public void keyPressed() {
         System.out.println("A correct guess was made");
         fill(RASPBERRY);
         text("That's correct!", 450, 450);
+        good.play();
         score += possiblePoints;
         quizIndex++;
         possiblePoints = 1000;
@@ -370,15 +390,17 @@ public void keyPressed() {
         scenario = 4;  
         System.out.println("Game over!");
         fill(RASPBERRY);
-        text("Health points: " + healthPoints, 5, 50);
         fill(RASPBERRY);
         text("Game over... Final Score: " + score, 450, 450);
+        file.amp(.001);
+        victory.play();
         musicSwap();
       } else {
           scenario = 3;
           System.out.println("An incorrect guess was made");
           fill(RASPBERRY);
           text("That's incorrect, try again!", 450, 450);
+          error.play();
           possiblePoints -= 250;
         }
       }
@@ -417,8 +439,9 @@ public void musicSwap() {
 
 public ArrayList<Question> loadQuestions() {
   ArrayList<Question> questions = new ArrayList<Question>();
-  String fileRoot = "C:\\Users\\jtspo\\Downloads\\CircleDodge\\FruitRain\\FruitRain\\FruitRain-Folder\\FruitRain_Feb27th_BuildB\\FruitRain\\"; //change this line to match YOUR file path. DO NOT include the csv file name
+  //String fileRoot = "C:\\Users\\jtspo\\Downloads\\CircleDodge\\FruitRain\\FruitRain\\FruitRain-Folder\\FruitRain_Feb27th_BuildB\\FruitRain\\"; //change this line to match YOUR file path. DO NOT include the csv file name
   //String fileRoot = "C:\\Users\\diony\\OneDrive\\Documents\\GitHub\\FruitRain-Folder\\FruitRain_Feb27th_BuildB\\FruitRain\\"; //change this line to match YOUR file path. DO NOT include the csv file name
+  String fileRoot = "C:\\Users\\dio\\Documents\\GitHub\\FruitRain-Folder\\FruitRain_Feb27th_BuildB\\FruitRain\\";
   while(true) {
       try {
         String filePath = fileRoot + quizName;
