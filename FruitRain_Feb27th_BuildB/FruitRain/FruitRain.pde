@@ -32,20 +32,20 @@ final public int BANANA = color(245, 239, 69);
 final public int LIME = color(111, 209, 75);
 final public int GRAPE = color(167, 58, 222);
 
-public Enemy[] enemies;
+public Enemy[] enemies; //the fruit
 
-public int guess;
-public int quizSize;
-public int quizIndex;
+public int guess; //your guess
+public int quizSize; //number of questions in the quiz
+public int quizIndex; //current location in the quiz list
 public int healthPoints;
-public int possiblePoints;
-public int correct;
-public int scenario;
-public boolean oneUp;
+public int possiblePoints; //possible points you can earn
+public int correct; //the correct guess number
+public int scenario; //used to activate certain events
+public boolean oneUp; //used to give players an extra life every six questions
 public int streak;
-public boolean quizChosen;
-public String quizName;
-public boolean quizLoaded;
+public boolean quizChosen; //used to ensure a quiz is only chosen once per game
+public String quizName; //concatenated to the end of the file path when loading the quiz
+public boolean quizLoaded; //used to ensure a quiz is only loaded once per game
 PImage backgroundImage;
 PImage startup;
 
@@ -165,7 +165,7 @@ void draw() {
     frames = frames + 1;
     
     
-  if (!start) {
+  if (!start) { //All stats and important variables are reset to their default values
     
     backgroundImage = loadImage("Beachreal2.png");
     quizIndex = 0;
@@ -306,7 +306,7 @@ public void keyPressed() {
 
     if(!quizChosen) {
       qpicked.play();
-      quizName = "QuizQuestions.csv";
+      quizName = "QuizQuestions.csv"; //Full quiz
       quizChosen = true;
     } else if (lastInputTime >= timeToSkip) {
       guess = 1;
@@ -322,7 +322,7 @@ public void keyPressed() {
 
     if(!quizChosen) {
       qpicked.play();
-      quizName = "Variables.csv";
+      quizName = "Variables.csv"; //variables quiz
       quizChosen = true;
     } else if (lastInputTime >= timeToSkip) {
       guess = 2;
@@ -339,7 +339,7 @@ public void keyPressed() {
 
     if(!quizChosen) {
       qpicked.play();
-      quizName = "Strings.csv";
+      quizName = "Strings.csv"; //strings quiz
       quizChosen = true;
     } else if (lastInputTime >= timeToSkip) {
       guess = 3;
@@ -355,7 +355,7 @@ public void keyPressed() {
 
     if(!quizChosen) {
       qpicked.play();
-      quizName = "Conditionals.csv";
+      quizName = "Conditionals.csv"; //conditionals quiz
       quizChosen = true;
     } else if (lastInputTime >= timeToSkip) {
       guess = 4;
@@ -374,7 +374,7 @@ public void keyPressed() {
   if(guess == correct) {
         streak++;
         scenario = 2;
-        System.out.println("A correct guess was made");
+        //System.out.println("A correct guess was made");
         fill(RASPBERRY);
         text("That's correct!", 450, 450);
         good.play();
@@ -389,7 +389,7 @@ public void keyPressed() {
         
         if(healthPoints <= 0) {
         scenario = 4;  
-        System.out.println("Game over!");
+        //System.out.println("Game over!");
         fill(RASPBERRY);
         fill(RASPBERRY);
         text("Game over... Final Score: " + score, 450, 450);
@@ -400,7 +400,7 @@ public void keyPressed() {
         
       else {
           scenario = 3;
-          System.out.println("An incorrect guess was made");
+          //System.out.println("An incorrect guess was made");
           fill(RASPBERRY);
           text("That's incorrect, try again!", 450, 450);
           error.play();
@@ -438,7 +438,7 @@ public void musicSwap() {
   }
 }
 
-// loadQuestions, called upon startup 
+// loadQuestions, called upon selecting a quiz to take
 
 public ArrayList<Question> loadQuestions() {
   ArrayList<Question> questions = new ArrayList<Question>();
