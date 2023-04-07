@@ -2,7 +2,7 @@
 
 Download all of the files from GitHub as a zip file.
 
-You will need to open the FruitRain.pde file and go to lines *insert lines here* and
+You will need to open the FruitRain.pde file and go to around line 448 and
 paste in the file location of QuizQuestions.csv. You can do this by locating them in
 your file explorer, right clicking the section that shows all of the folder names,
 and clicking "Copy address". Then paste the addresses in place of the pre-written
@@ -18,7 +18,7 @@ While you have this file open, you will need to download the Sound library;
 to do so, click on Sketch, then hover over Import Library, then click Add Library
 (depending on your version of Processing it may be a different option).
 Search for the Sound Library and download. If no errors occur when attempting to
-play the music, then you've done this step correctly.
+play the music, then you've done this step correctly. You will also need to download the GifAnimation library.
 
 Hook up the Makey-Makey controller to your PC and connect an apple, orange,
 banana, and lime to the controller's up, down, left, and right dpad areas respectively
