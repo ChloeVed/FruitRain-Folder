@@ -322,7 +322,7 @@ public void keyPressed() {
 
     if(!quizChosen) {
       qpicked.play();
-      quizName = "Variables.csv"; //variables quiz
+      quizName = "Variables2.csv"; //variables quiz
       quizChosen = true;
     } else if (lastInputTime >= timeToSkip) {
       guess = 2;
@@ -442,7 +442,7 @@ public void musicSwap() {
 
 public ArrayList<Question> loadQuestions() {
   ArrayList<Question> questions = new ArrayList<Question>();
-  String fileRoot = "C:\\Users\\jtspo\\Downloads\\CircleDodge\\FruitRain\\FruitRain\\FruitRain-Folder\\FruitRain_Feb27th_BuildB\\FruitRain\\"; //change this line to match YOUR file path. DO NOT include the csv file name
+  String fileRoot = "C:\\Users\\jtspo\\Downloads\\CircleDodge\\FruitRain\\FruitRain\\FruitRain-Folder\\FruitRain\\"; //change this line to match YOUR file path. DO NOT include the csv file name
   //String fileRoot = "C:\\Users\\diony\\OneDrive\\Documents\\GitHub\\FruitRain-Folder\\FruitRain_Feb27th_BuildB\\FruitRain\\"; //change this line to match YOUR file path. DO NOT include the csv file name
   //String fileRoot = "C:\\Users\\dio\\Documents\\GitHub\\FruitRain-Folder\\FruitRain_Feb27th_BuildB\\FruitRain\\";
   while(true) {
