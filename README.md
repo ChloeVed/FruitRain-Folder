@@ -42,5 +42,6 @@ choice is notated in what would be their arraylist index, as in you start counti
 i.e. if the correct answer is the second choice, put a "1" in the last used cell of that row.
 
 When building the quiz, you have the choice of four answers or two. For four answers, set the third cell of the row to 1. For two answers, set it to 2.
+The second column is used for question IDs, the program itself never uses these values, they're simply meant for your own organization.
 
 The file names in lines 189-195 must match the quizzes you intend your players to try to complete.
